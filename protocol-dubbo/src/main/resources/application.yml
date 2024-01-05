@@ -1,0 +1,15 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: protocol-dubbo
+dubbo:
+  application:
+    name: ${spring.application.name}
+    register-mode: instance
+    qos-enable: false
+  registry:
+    address: nacos://localhost:8848?username=nacos&password=nacos
+    #    address: zookeeper://127.0.0.1:2181
+  protocol:
+    port: 20880

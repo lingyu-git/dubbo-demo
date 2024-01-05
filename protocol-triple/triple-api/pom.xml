@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>triple-api</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>triple-api</name>
+    <description>triple-api</description>
+
+    <properties>
+        <java.version>17</java.version>
+        <grpc.version>1.36.0</grpc.version>
+        <protoc.version>3.7.1</protoc.version>
+        <dubbo.version>3.0.0</dubbo.version>
+        <dubbo.compiler.version>0.0.2</dubbo.compiler.version>
+        <dubbo.serialization.protobuf.version>2.7.12</dubbo.serialization.protobuf.version>
+    </properties>
+
+    <dependencies>
+        <!--
+            dubbo
+         -->
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>${dubbo.version}</version>
+        </dependency>
+
+        <!--
+            grpc
+         -->
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-protobuf</artifactId>
+            <version>${grpc.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-stub</artifactId>
+            <version>${grpc.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-serialization-protobuf</artifactId>
+            <version>${dubbo.serialization.protobuf.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>1.6.1</version>
+            </extension>
+        </extensions>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.xolstice.maven.plugins</groupId>
+                <artifactId>protobuf-maven-plugin</artifactId>
+                <version>0.6.1</version>
+                <configuration>
+                    <protocArtifact>com.google.protobuf:protoc:${protoc.version}:exe:osx-x86_64</protocArtifact>
+                    <pluginId>grpc-java</pluginId>
+                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:osx-x86_64</pluginArtifact>
+                    <outputDirectory>build/generated/source/proto/main/java</outputDirectory>
+                    <clearOutputDirectory>false</clearOutputDirectory>
+                    <protocPlugins>
+                        <protocPlugin>
+                            <id>dubbo</id>
+                            <groupId>org.apache.dubbo</groupId>
+                            <artifactId>dubbo-compiler</artifactId>
+                            <version>${dubbo.compiler.version}</version>
+                            <mainClass>org.apache.dubbo.gen.dubbo.Dubbo3Generator</mainClass>
+                        </protocPlugin>
+                    </protocPlugins>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>test-compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- 设置多个源文件夹 -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <!-- 添加主源码目录 -->
+                    <execution>
+                        <!--指定绑定到生命周期-->
+                        <phase>generate-sources</phase>
+                        <!--指定的目标,可添加多个-->
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <!--资源文件目录,可添加多个-->
+                            <sources>
+                                <source>build/generated/source/proto/main/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

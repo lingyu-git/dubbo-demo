@@ -1,0 +1,6 @@
+alipay=spi.com.example.protocol.dubbo.AliPayOrder
+wechatpay=spi.com.example.protocol.dubbo.WechatPayOrder
+adaptive=adaptive.spi.com.example.protocol.dubbo.AdaptiveOrder
+wrapper=wrapper.spi.com.example.protocol.dubbo.OrderWrapper
+card=spi.com.example.protocol.dubbo.CardPayOrder
+cash=spi.com.example.protocol.dubbo.CashPayOrder
